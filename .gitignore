@@ -1,0 +1,43 @@
+# Mind vs Machine RNG - Git Ignore
+
+# Session data directory
+data/
+*.json
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Exports
+exports/
+*.csv
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak

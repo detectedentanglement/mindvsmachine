@@ -57,6 +57,9 @@ def initialize_session_state():
     if "show_prediction" not in st.session_state:
         st.session_state.show_prediction = True
 
+    if "confirm_delete" not in st.session_state:
+        st.session_state.confirm_delete = False
+
 
 def save_session(prediction, generated, game_mode, min_val, max_val, algorithm):
     """Save a game session"""
@@ -223,14 +226,26 @@ def main():
                     st.error("❌ Export failed")
 
         with export_cols[1]:
-            if st.button("🗑️ Clear All Data", use_container_width=True):
-                if st.session_state.sessions:
-                    st.warning("⚠️ This will delete all session data!")
-                    if st.button("⚠️ Confirm Delete", type="secondary"):
+            # Show confirmation button if delete was clicked
+            if not st.session_state.confirm_delete:
+                if st.button("🗑️ Clear All Data", use_container_width=True):
+                    st.session_state.confirm_delete = True
+                    st.rerun()
+            else:
+                # Confirmation mode
+                st.warning("⚠️ This will delete all session data!")
+                col_a, col_b = st.columns(2)
+                with col_a:
+                    if st.button("✅ Yes, Delete", use_container_width=True, type="primary"):
                         st.session_state.sessions = []
                         session_manager = SessionManager()
                         session_manager.save_sessions([])
-                        st.success("✅ All data cleared")
+                        st.session_state.confirm_delete = False
+                        st.success("✅ All data cleared!")
+                        st.rerun()
+                with col_b:
+                    if st.button("❌ Cancel", use_container_width=True):
+                        st.session_state.confirm_delete = False
                         st.rerun()
 
         with export_cols[2]:
